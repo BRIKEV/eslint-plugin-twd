@@ -1,5 +1,6 @@
 import type { ESLint } from "eslint";
 import noFocusedTests from "./rules/no-focused-tests";
+import singleTopLevelDescribe from "./rules/single-top-level-describe";
 
 const plugin = {
   meta: {
@@ -8,6 +9,7 @@ const plugin = {
   },
   rules: {
     "no-focused-tests": noFocusedTests,
+    "single-top-level-describe": singleTopLevelDescribe,
   },
   configs: {},
 };
