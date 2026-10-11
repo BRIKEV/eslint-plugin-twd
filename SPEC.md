@@ -192,34 +192,14 @@ locally and in CI. The way to isolate a test is
 `npx twd-cli run --test "name"`. No autofix: removing `.only` changes what runs,
 and the author should see that.
 
-#### `twd/mock-before-visit` — warn
+#### ~~`twd/mock-before-visit`~~ — dropped
 
-Reports a `twd.mockRequest(...)` or `twd.mockComponent(...)` that comes after
-a `twd.visit(...)` in the same test **with no user action between them**.
-
-Why the "no action between" condition: registering a mock after `visit` is fine
-when the request is fired later by a click (`visit` → `mockRequest("create")` →
-`click("Save")`). It is a bug when the request fires on page load, because the
-load already happened. Statically, "no `userEvent.*` call between the visit and
-the mock" is the closest safe signal.
-
-```ts
-// invalid — the page load request already fired
-await twd.visit("/todos");
-await twd.mockRequest("getTodos", { method: "GET", url: "/api/todos", response: [] });
-
-// valid — mocked before the click that sends it
-await twd.visit("/todos");
-await twd.mockRequest("createTodo", { method: "POST", url: "/api/todos", response: {} });
-await userEvent.click(save);
-
-// valid — re-registering an alias to wait on it twice, after an action
-await userEvent.click(refresh);
-await twd.waitForRequest("getUser");
-await twd.mockRequest("getUser", { /* ... */ });
-```
-
-Level `warn`, not `error`: it is a heuristic.
+Was: warn on a `twd.mockRequest(...)` registered after `twd.visit(...)` with no
+user action between them. Dropped (2026-10-11) because it guesses at intent
+instead of checking a fact: whether a mock after `visit` is a bug depends on
+when the app fires the request, which the source does not show. Tests are
+written in many valid orders, and handling `beforeEach` makes it worse. A
+warning that fires on correct code gets switched off, so it protects nothing.
 
 ### Phase 2 — component tests
 
@@ -363,8 +343,7 @@ The order to build it in, one idea per step. Each step ends with green tests.
    with `context.sourceCode.getScope`). Autofix with `fixer.insertTextBefore`.
 7. **`no-request-body`.** Learn to follow a variable back to its initialiser
    (`const rule = await twd.waitForRequest(...)`).
-8. **`mock-before-visit`.** Learn to walk the statements of a function body in
-   order and keep a small state machine (seen visit → seen action → mock).
+8. ~~**`mock-before-visit`.**~~ Dropped — see the rule's section above.
 9. **The corpus test.** Copy the real tests in, run `recommended`, and triage
    every report. This is where the rules meet reality.
 10. **Configs and docs.** `recommended`, the docs pages, the README. Publish
@@ -386,8 +365,5 @@ References:
 - Package name: `eslint-plugin-twd` (ESLint's naming convention, gives the
   `twd/` rule prefix) — free on npm as of 2026-10-09, as is `twd-lint`. Publish
   `twd-lint` as the bin of the same package, or as its own package?
-- Should `mock-before-visit` also know about `beforeEach`? A mock registered in
-  `beforeEach` always runs before the test's `visit`, so it is safe; a `visit`
-  in `beforeEach` followed by a mock in the test is the bug.
 - Detecting a component test by the `render` import: are there TWD tests that
   import `render` for another reason?
