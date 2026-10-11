@@ -1,4 +1,5 @@
 import { Linter } from "eslint";
+import pkg from "../package.json";
 import { describe, expect, it } from "vitest";
 import plugin from "../src/index";
 
@@ -37,5 +38,11 @@ describe("configs.recommended", () => {
   it("parses JSX in .tsx test files", () => {
     const code = `import { render } from "@testing-library/react";\nit.only("a", async () => { render(<App />); });`;
     expect(lint(code, "src/a.twd.test.tsx").map((m) => m.ruleId)).toEqual(["twd/no-focused-tests"]);
+  });
+});
+
+describe("meta", () => {
+  it("reports the package's name and version", () => {
+    expect(plugin.meta).toEqual({ name: pkg.name, version: pkg.version });
   });
 });

@@ -1,5 +1,6 @@
 import tsParser from "@typescript-eslint/parser";
 import type { ESLint, Linter } from "eslint";
+import pkg from "../package.json";
 import * as recommended from "./configs/recommended";
 import noFocusedTests from "./rules/no-focused-tests";
 import noMissingAwait from "./rules/no-missing-await";
@@ -9,8 +10,8 @@ import singleTopLevelDescribe from "./rules/single-top-level-describe";
 
 const plugin = {
   meta: {
-    name: "eslint-plugin-twd",
-    version: "0.0.0",
+    name: pkg.name,
+    version: pkg.version,
   },
   rules: {
     "no-focused-tests": noFocusedTests,
