@@ -4,10 +4,16 @@ on:
   release:
     types: [published]
 
-# id-token: write lets npm sign provenance (a public record that this package
-# was built from this repo by this workflow). It also prepares the switch to
-# npm Trusted Publishing, which authenticates over the same OIDC token and
-# makes the NPM_TOKEN secret unnecessary.
+# id-token: write is what makes this job publishable at all. npm Trusted
+# Publishing authenticates it with a short-lived GitHub OIDC token instead of a
+# long-lived NPM_TOKEN, and the same token signs provenance. Without this
+# permission there is no credential to present, so the publish fails rather than
+# quietly shipping an unsigned package.
+#
+# The trust is configured on npm against this repository AND this workflow
+# filename, so renaming this file revokes it. Because `release` events run the
+# default branch's copy of a workflow, a change here only takes effect once it
+# is on main.
 permissions:
   contents: read
   id-token: write
@@ -26,6 +32,11 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org/
           cache: npm
+
+      # node:24 ships npm 11.13.0 and `npm stage publish` needs 11.15.0 or
+      # newer. Do not remove this step.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
 
       # The release tag (v0.1.0) must match package.json (0.1.0), so a release
       # can never publish a version other than the one it names.
@@ -61,19 +72,16 @@ jobs:
           done
           npm pack --dry-run
 
-      # Token-based for now: NPM_TOKEN is a repository secret holding an npm
-      # granular access token with publish rights. To move to Trusted Publishing
-      # later, configure it on npmjs.com for this repo and this workflow file,
-      # then delete the env block below and the secret.
+      # No NODE_AUTH_TOKEN, and no npm secret in this repository: the trusted
+      # publisher on npm authenticates this job over OIDC.
       #
-      # Prereleases go to the "beta" dist-tag so `npm install twd-lint`
-      # keeps resolving to the latest stable version.
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ "${{ github.event.release.prerelease }}" = "true" ]; then
-            npm publish --access public --tag beta --provenance
-          else
-            npm publish --access public --provenance
-          fi
+      # `stage publish` does NOT make the version live. It uploads the tarball
+      # and defers proof-of-presence, so a green run here means "staged":
+      # approve it in npm's UI or with `npm stage approve <stage-id>` to
+      # actually publish (`npm stage list` finds it, `npm stage reject` discards
+      # it). The credential CI holds can stage a release but not complete one.
+      #
+      # Prereleases go to the "beta" dist-tag so `npm install twd-lint` keeps
+      # resolving to the latest stable version.
+      - name: Stage the publish
+        run: npm stage publish --access public --provenance ${{ github.event.release.prerelease && '--tag beta' || '' }}

@@ -70,12 +70,6 @@ for another reason?
 1.0.0 comes after this integration has run on real projects for a while: from
 then on, a rule reporting more than before is a breaking change.
 
-## Publishing
-
-Move `publish.yml` from the `NPM_TOKEN` secret to npm Trusted Publishing:
-configure it on npmjs.com for this repo and workflow file, remove the
-`NODE_AUTH_TOKEN` env block, delete the secret.
-
 ## Decided against
 
 - **`mock-before-visit`**: warn on a `twd.mockRequest` registered after
