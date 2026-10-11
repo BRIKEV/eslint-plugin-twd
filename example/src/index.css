@@ -1,0 +1,15 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 2rem;
+}
+
+form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: end;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+}

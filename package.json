@@ -2,7 +2,14 @@
   "name": "eslint-plugin-twd",
   "version": "0.0.0",
   "description": "ESLint rules that catch TWD test mistakes in the editor and in CI",
-  "keywords": ["eslint", "eslintplugin", "eslint-plugin", "twd", "twd-js", "testing"],
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "twd",
+    "twd-js",
+    "testing"
+  ],
   "license": "MIT",
   "author": "BRIKEV",
   "repository": {
@@ -16,14 +23,19 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup src/index.ts --format esm --dts --watch"
   },
   "peerDependencies": {
     "eslint": "^9.0.0 || ^10.0.0"

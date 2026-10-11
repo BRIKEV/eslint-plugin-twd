@@ -1,0 +1,4 @@
+{
+  // Run ESLint from example/ so its eslint.config.js (with this plugin) is used
+  "eslint.workingDirectories": ["./example"]
+}
