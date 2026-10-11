@@ -16,7 +16,7 @@
   "author": "BRIKEV",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BRIKEV/twd-lint.git"
+    "url": "git+https://github.com/BRIKEV/twd-lint.git"
   },
   "homepage": "https://github.com/BRIKEV/twd-lint#readme",
   "bugs": {
@@ -30,7 +30,7 @@
     }
   },
   "bin": {
-    "twd-lint": "./dist/cli.js"
+    "twd-lint": "dist/cli.js"
   },
   "files": [
     "dist"
