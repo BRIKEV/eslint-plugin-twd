@@ -78,11 +78,11 @@ then on, a rule reporting more than before is a breaking change.
 
 ## Decided against
 
-- **`single-top-level-describe` in `recommended`**: it shipped as an error in
-  0.1.x on the belief that several top-level `describe`s break the runner. They
-  do not: the runner treats them like several files. Scanning real projects
-  found 44 reports in 4 repos, all on working tests. It stays available as an
-  opt-in style rule.
+- **`single-top-level-describe`**: shipped as an error in 0.1.x on the belief
+  that several top-level `describe`s break the runner. They do not: the runner
+  treats them like several files. Scanning real projects found 44 reports in 4
+  repos, all on working tests. One root per file is a style preference, not a
+  mistake, so the rule was removed in 1.0.0.
 
 - **`mock-before-visit`**: warn on a `twd.mockRequest` registered after
   `twd.visit` with no user action between. Whether that is a bug depends on

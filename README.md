@@ -63,7 +63,7 @@ That is all. `recommended`:
   or your Vitest/Jest tests;
 - brings its own TypeScript parser for those files, so it works in JavaScript
   projects and in projects without TypeScript set up in ESLint;
-- turns on every rule in the first table below as an error.
+- turns on every rule below as an error.
 
 To pick rules yourself instead:
 
@@ -95,29 +95,6 @@ export default [
 The autofix for `no-missing-await` is applied only inside an `async` function,
 where adding `await` is always valid.
 
-These are the rules `recommended` and `npx twd-lint` run. Each one catches a
-real mistake, so each one is an error.
-
-### Opt-in rules
-
-Style preferences rather than mistakes: off by default, available in your own
-ESLint config.
-
-| Rule | What it reports |
-|---|---|
-| [`twd/single-top-level-describe`](docs/rules/single-top-level-describe.md) | More than one top-level `describe` in a file |
-
-```js
-import twd from 'twd-lint'
-
-export default [
-  twd.configs.recommended,
-  {
-    files: ['**/*.twd.test.{ts,tsx,js,jsx}'],
-    rules: { 'twd/single-top-level-describe': 'warn' },
-  },
-]
-```
 
 ### Examples
 

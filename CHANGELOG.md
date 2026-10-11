@@ -1,15 +1,16 @@
 ## Unreleased
 
-* feat!: `twd/single-top-level-describe` is now an opt-in style rule, no longer in `recommended` or run by `npx twd-lint`
+* feat!: remove `twd/single-top-level-describe`
 
-**Why `single-top-level-describe` left `recommended`.** It shipped as an error
-on the belief that several top-level `describe`s in one file break the TWD
-runner. They do not: the runner treats every root suite the same, so a file
-with three roots behaves like three files. Running twd-lint over real projects
-found 44 reports across 4 repos, every one on tests that run and pass, many of
-them unit-style files with one root per function. A rule that fires on working
-code gets switched off, so it is now a style preference you can turn on in your
-own ESLint config. Its message no longer claims the runner needs one root.
+**Why `single-top-level-describe` is gone.** It shipped as an error on the
+belief that several top-level `describe`s in one file break the TWD runner.
+They do not: the runner treats every root suite the same, so a file with three
+roots behaves like three files. Running twd-lint over real projects found 44
+reports across 4 repos, every one on tests that run and pass, many of them
+unit-style files with one root per function. One root per file is a style
+preference, not a mistake, and twd-lint only reports mistakes. If your ESLint
+config names `twd/single-top-level-describe`, remove that line: ESLint reports
+a rule it cannot find.
 
 ## <small>0.1.1 (2026-10-11)</small>
 

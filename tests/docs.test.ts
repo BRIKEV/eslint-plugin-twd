@@ -8,12 +8,6 @@ import plugin from "../src/index";
 const rules = Object.entries(plugin.rules ?? {});
 const readme = readFileSync(new URL("../README.md", import.meta.url), "utf8");
 
-// Every rule on, so the pages of opt-in rules are checked too
-const allRulesConfig = {
-  ...plugin.configs.recommended,
-  rules: Object.fromEntries(rules.map(([name]) => [`twd/${name}`, "error" as const])),
-};
-
 describe.each(rules)("twd/%s", (name, rule) => {
   const page = new URL(`../docs/rules/${name}.md`, import.meta.url);
 
@@ -40,7 +34,7 @@ describe.each(rules)("twd/%s", (name, rule) => {
     expect(examples.length).toBeGreaterThanOrEqual(2);
 
     for (const code of examples) {
-      const messages = new Linter().verify(code, [allRulesConfig], "a.twd.test.ts");
+      const messages = new Linter().verify(code, [plugin.configs.recommended], "a.twd.test.ts");
       expect(messages.filter((m) => m.ruleId === null)).toEqual([]); // parses
       const reported = messages.some((m) => m.ruleId === `twd/${name}`);
       expect(reported, code).toBe(code.startsWith("// ❌"));

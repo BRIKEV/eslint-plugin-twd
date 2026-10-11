@@ -3,8 +3,6 @@ import type { Linter } from "eslint";
 // TWD test files only, so the plugin never touches app code
 export const files = ["**/*.twd.test.{ts,tsx,js,jsx}"];
 
-// Rules that catch real mistakes. Opt-in style rules (single-top-level-describe)
-// are left out: a rule that fires on working code gets switched off.
 export const rules: Linter.RulesRecord = {
   "twd/no-focused-tests": "error",
   "twd/runner-imports": "error",
