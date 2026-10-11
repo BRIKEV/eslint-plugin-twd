@@ -41,6 +41,12 @@ for another reason?
   `restorePage()` puts the app back. Without it, every flow test after the file
   sees a blank page. See the twd docs, "Component Testing".
 
+## CLI: files outside the current folder
+
+`npx twd-lint ../other/a.twd.test.ts` reports "No TWD test files found":
+ESLint ignores files outside its `cwd` ("outside of base path"). Resolve each
+given path and lint it from a common base, or say clearly why it was skipped.
+
 ## More rules and a `strict` config
 
 `strict` = `recommended` plus the opt-in rules. Noisy rules stay out of
