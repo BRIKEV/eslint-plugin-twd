@@ -1,6 +1,17 @@
-## Unreleased
+## 1.0.0 (2026-10-12)
 
-* feat!: remove `twd/single-top-level-describe`
+* feat!: remove `twd/single-top-level-describe` ([e70ab56](https://github.com/BRIKEV/twd-lint/commit/e70ab56), [4968a16](https://github.com/BRIKEV/twd-lint/commit/4968a16))
+* docs(roadmap): note that the CLI skips files outside the current folder ([f6fc346](https://github.com/BRIKEV/twd-lint/commit/f6fc346))
+* docs: drop a stray blank line in the README ([99c2464](https://github.com/BRIKEV/twd-lint/commit/99c2464))
+
+**What 1.0.0 means.** twd-lint has run over 494 TWD test files: the BRIKEV
+example apps (React, Vue, Angular, Solid, Svelte, Nuxt, TanStack and plain JS)
+and eight production and side projects. Every report it gives there is a real
+mistake. From here on the rules are stable:
+a rule that reports more than before, or a new rule in `recommended`, is a
+breaking change and waits for a major version. `recommended` and `npx twd-lint`
+run four rules: `no-missing-await`, `runner-imports`, `no-request-body` and
+`no-focused-tests`.
 
 **Why `single-top-level-describe` is gone.** It shipped as an error on the
 belief that several top-level `describe`s in one file break the TWD runner.
