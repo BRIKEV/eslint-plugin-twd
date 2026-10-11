@@ -66,6 +66,8 @@ npm run lint           # or open the files in your editor with the ESLint extens
 
 ## Writing or changing a rule
 
+See [ROADMAP.md](ROADMAP.md) for planned rules and the decisions already made.
+
 1. **Open an issue first** for a new rule, so we can agree it is worth having.
 2. **Tests first.** Write the `RuleTester` cases in `tests/rules/<rule>.test.ts`
    before the rule: valid code that must not be reported, invalid code with the
