@@ -27,8 +27,8 @@ const memberCall = (node: TSESTree.CallExpression) => {
   return { object: callee.object, method: callee.property.name };
 };
 
-// `object.method()` with exactly these names
-const isCallTo = (node: TSESTree.Node, object: string, method: string) => {
+/** `object.method()` with exactly these names */
+export const isCallTo = (node: TSESTree.Node, object: string, method: string) => {
   if (node.type !== AST_NODE_TYPES.CallExpression) return false;
   const call = memberCall(node);
   return (

@@ -143,13 +143,15 @@ describe("Todos", () => {
 "Top-level" means a `describe` call whose statement sits in the program body,
 not inside another function.
 
-#### `twd/no-request-body` — error, autofix
+#### `twd/no-request-body` — error
 
 Reports `.request.body` read from the result of `twd.waitForRequest(...)` or
 `twd.waitForRequests(...)[i]`. `rule.request` already is the parsed body;
 `.body` is `undefined` and the next property access throws.
 
-Fix: remove `.body`.
+No autofix: a payload can have a real `body` field (`{ title, body }`), where
+`rule.request.body` is correct and removing `.body` would silently break the
+test. The message tells the author to disable the rule for that line.
 
 ```ts
 // invalid
