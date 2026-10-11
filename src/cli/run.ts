@@ -1,5 +1,5 @@
-import { existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, statSync } from "node:fs";
+import { posix, resolve, sep } from "node:path";
 import { parseArgs } from "node:util";
 import { ESLint } from "eslint";
 import pkg from "../../package.json";
@@ -33,6 +33,34 @@ const IGNORES = [
   "**/.output/",
   "**/.svelte-kit/",
 ];
+
+const TEST_FILES = "**/*.twd.test.{ts,tsx,js,jsx}";
+
+// A folder becomes a glob of the TWD tests in it. Given a bare folder, ESLint
+// would also lint every .js, .mjs and .cjs file in it, whatever the config says.
+const toPatterns = (paths: string[], cwd: string) =>
+  paths.map((path) =>
+    statSync(resolve(cwd, path)).isDirectory()
+      ? posix.join(path.split(sep).join("/"), TEST_FILES)
+      : path,
+  );
+
+// The CLI loads only twd rules, so an eslint-disable comment for any other rule
+// (from the project's own ESLint setup) comes back as "Definition for rule ...
+// was not found". Those are not the test's problems: drop them and recount.
+const keepTwdMessages = (result: ESLint.LintResult): ESLint.LintResult => {
+  const messages = result.messages.filter((m) => m.ruleId === null || m.ruleId.startsWith("twd/"));
+  const count = (severity: number, fixable = false) =>
+    messages.filter((m) => m.severity === severity && (!fixable || m.fix)).length;
+  return {
+    ...result,
+    messages,
+    errorCount: count(2),
+    warningCount: count(1),
+    fixableErrorCount: count(2, true),
+    fixableWarningCount: count(1, true),
+  };
+};
 
 export interface Io {
   cwd: string;
@@ -84,12 +112,17 @@ export const run = async (args: string[], io: Io): Promise<number> => {
     cwd: io.cwd,
     // Only our config: the project's eslint.config.js, if any, is not loaded
     overrideConfigFile: true,
-    overrideConfig: [{ ignores: IGNORES }, plugin.configs.recommended],
+    overrideConfig: [
+      { ignores: IGNORES },
+      plugin.configs.recommended,
+      // A directive for a rule the CLI does not run is not "unused"
+      { linterOptions: { reportUnusedDisableDirectives: "off" } },
+    ],
     fix: values.fix,
     errorOnUnmatchedPattern: false,
   });
 
-  const results = await eslint.lintFiles(paths);
+  const results = (await eslint.lintFiles(toPatterns(paths, io.cwd))).map(keepTwdMessages);
   // A file given by name that is not a TWD test comes back with an "ignored" warning
   const isIgnored = (result: ESLint.LintResult) =>
     result.messages.some((m) => m.ruleId === null && m.severity === 1 && /ignored/i.test(m.message));

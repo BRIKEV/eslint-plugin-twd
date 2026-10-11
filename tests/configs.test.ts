@@ -35,6 +35,11 @@ describe("configs.recommended", () => {
     expect(messages.some((m) => m.ruleId?.startsWith("twd/"))).toBe(false);
   });
 
+  it("parses JSX in .js test files (Create React App style)", () => {
+    const code = `it.only("a", async () => { render(<App />); });`;
+    expect(lint(code, "src/a.twd.test.js").map((m) => m.ruleId)).toEqual(["twd/no-focused-tests"]);
+  });
+
   it("parses JSX in .tsx test files", () => {
     const code = `import { render } from "@testing-library/react";\nit.only("a", async () => { render(<App />); });`;
     expect(lint(code, "src/a.twd.test.tsx").map((m) => m.ruleId)).toEqual(["twd/no-focused-tests"]);

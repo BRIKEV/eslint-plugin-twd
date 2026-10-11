@@ -81,6 +81,55 @@ describe("twd-lint", () => {
     expect((await twdLint()).code).toBe(0);
   });
 
+  // ESLint lints **/*.js, *.mjs and *.cjs in any folder by default; the CLI must not
+  it("does not lint plain .js, .mjs or .cjs app files", async () => {
+    createProject({
+      "a.twd.test.ts": CLEAN,
+      "src/index.js": `render(<App />);`, // JSX in .js: a parse error if linted
+      "src/legacy.js": `/* eslint-disable import/no-dynamic-require */\nrequire(x);`,
+      "server.mjs": `export {};`,
+      "config.cjs": `module.exports = {};`,
+    });
+    const { code, stdout } = await twdLint("--format", "json");
+    expect(code).toBe(0);
+    expect(JSON.parse(stdout).map((r: { filePath: string }) => r.filePath)).toEqual([
+      join(project, "a.twd.test.ts"),
+    ]);
+  });
+
+  // The CLI loads only twd rules, so directives for the project's other rules are not errors
+  it("ignores eslint-disable comments for rules from the project's own setup", async () => {
+    createProject({
+      "a.twd.test.ts": `/* eslint-disable import/no-unresolved */
+import { twd } from "twd-js";
+import { describe, it } from "twd-js/runner";
+
+describe("a", () => {
+  it("b", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rule: any = await twd.waitForRequest("a");
+    // eslint-disable-next-line twd/no-request-body -- the payload has a body field
+    rule.request.body;
+  });
+});
+`,
+    });
+    const { code, stdout } = await twdLint();
+    expect(stdout).toBe("");
+    expect(code).toBe(0);
+  });
+
+  it("still reports twd problems next to directives for other rules", async () => {
+    createProject({
+      "a.twd.test.ts": `// eslint-disable-next-line @typescript-eslint/no-explicit-any
+it.only("a", async () => {});`,
+    });
+    const { code, stdout } = await twdLint();
+    expect(code).toBe(1);
+    expect(stdout).toContain("twd/no-focused-tests");
+    expect(stdout).not.toContain("not found");
+  });
+
   it("lints .tsx, .js and .jsx test files too", async () => {
     createProject({
       "a.twd.test.tsx": `it.only("a", async () => { render(<App />); });`,
