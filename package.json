@@ -1,20 +1,22 @@
 {
-  "name": "eslint-plugin-twd",
+  "name": "twd-lint",
   "version": "0.0.0",
-  "description": "ESLint rules that catch TWD test mistakes in the editor and in CI",
+  "description": "Lint TWD tests: catch mistakes in the editor and in CI. An ESLint plugin, with a zero-config CLI on the way.",
   "keywords": [
     "eslint",
     "eslintplugin",
     "eslint-plugin",
     "twd",
     "twd-js",
-    "testing"
+    "testing",
+    "lint",
+    "linter"
   ],
   "license": "MIT",
   "author": "BRIKEV",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BRIKEV/eslint-plugin-twd.git"
+    "url": "https://github.com/BRIKEV/twd-lint.git"
   },
   "type": "module",
   "exports": {
@@ -53,8 +55,8 @@
     "typescript": "~6.0",
     "vitest": "^5.0.3"
   },
-  "homepage": "https://github.com/BRIKEV/eslint-plugin-twd#readme",
+  "homepage": "https://github.com/BRIKEV/twd-lint#readme",
   "bugs": {
-    "url": "https://github.com/BRIKEV/eslint-plugin-twd/issues"
+    "url": "https://github.com/BRIKEV/twd-lint/issues"
   }
 }

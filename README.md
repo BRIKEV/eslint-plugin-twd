@@ -1,4 +1,4 @@
-# eslint-plugin-twd
+# twd-lint
 
 ESLint rules that catch [TWD](https://github.com/BRIKEV/twd) test mistakes while
 you write them, in the editor and in CI, instead of in a failing browser run.
@@ -12,7 +12,7 @@ so a linter can underline them as you type, and fix many of them for you.
 ## Install
 
 ```bash
-npm install --save-dev eslint eslint-plugin-twd
+npm install --save-dev eslint twd-lint
 ```
 
 Requires ESLint 9 or 10 (flat config) and Node 20 or later.
@@ -22,7 +22,7 @@ Requires ESLint 9 or 10 (flat config) and Node 20 or later.
 Add the recommended config to your `eslint.config.js`:
 
 ```js
-import twd from 'eslint-plugin-twd'
+import twd from 'twd-lint'
 
 export default [
   // ...your own config
@@ -41,7 +41,7 @@ That is all. `recommended`:
 To pick rules yourself instead:
 
 ```js
-import twd from 'eslint-plugin-twd'
+import twd from 'twd-lint'
 
 export default [
   {

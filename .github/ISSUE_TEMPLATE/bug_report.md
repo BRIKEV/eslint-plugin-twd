@@ -52,7 +52,7 @@ Your `eslint.config.js`, or the part that loads this plugin:
 
 ## Versions
 
-- **eslint-plugin-twd**: [e.g. 0.1.0]
+- **twd-lint**: [e.g. 0.1.0]
 - **eslint**: [e.g. 10.12.0]
 - **Node**: [e.g. 22.11.0]
 - **twd-js**: [e.g. 1.10.1]

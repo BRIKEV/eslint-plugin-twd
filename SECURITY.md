@@ -8,13 +8,13 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in eslint-plugin-twd, please report it
+If you discover a security vulnerability in twd-lint, please report it
 responsibly.
 
 **Do not open a public issue.** Instead, use one of these options:
 
 1. **GitHub Private Vulnerability Reporting** — Go to the
-   [Security Advisories](https://github.com/BRIKEV/eslint-plugin-twd/security/advisories/new)
+   [Security Advisories](https://github.com/BRIKEV/twd-lint/security/advisories/new)
    page and create a new advisory. This keeps the report private until a fix is
    available.
 
@@ -36,7 +36,7 @@ responsibly.
 
 ## Scope
 
-eslint-plugin-twd is a development-only static analysis tool. It reads source
+twd-lint is a development-only static analysis tool. It reads source
 files and, with `--fix`, rewrites them. It does not run your tests, start a
 browser or make network requests. Relevant reports include:
 

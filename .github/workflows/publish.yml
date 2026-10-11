@@ -66,7 +66,7 @@ jobs:
       # later, configure it on npmjs.com for this repo and this workflow file,
       # then delete the env block below and the secret.
       #
-      # Prereleases go to the "beta" dist-tag so `npm install eslint-plugin-twd`
+      # Prereleases go to the "beta" dist-tag so `npm install twd-lint`
       # keeps resolving to the latest stable version.
       - name: Publish to npm
         env:

@@ -13,7 +13,7 @@ describe.each(rules)("twd/%s", (name, rule) => {
 
   it("links to its docs page", () => {
     expect(rule.meta?.docs?.url).toBe(
-      `https://github.com/BRIKEV/eslint-plugin-twd/blob/main/docs/rules/${name}.md`,
+      `https://github.com/BRIKEV/twd-lint/blob/main/docs/rules/${name}.md`,
     );
   });
 

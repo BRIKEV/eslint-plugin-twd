@@ -1,7 +1,7 @@
-# eslint-plugin-twd example
+# twd-lint example
 
 A small Vite + React todo app with TWD tests, used as a playground for the
-plugin in the parent folder.
+twd-lint plugin in the parent folder.
 
 - `src/twd-tests/` — correct TWD tests. They run in the TWD sidebar and lint clean.
 - `lint-playground/` — deliberately broken tests, one mistake per rule. Lint only.

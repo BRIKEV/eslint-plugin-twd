@@ -1,12 +1,12 @@
-# Contributing to eslint-plugin-twd
+# Contributing to twd-lint
 
-Thanks for your interest in eslint-plugin-twd, the ESLint plugin that catches
+Thanks for your interest in twd-lint, the linter that catches
 [TWD](https://github.com/BRIKEV/twd) test mistakes before they reach the
 browser.
 
 ## Contributions
 
-eslint-plugin-twd welcomes contributions from everyone.
+twd-lint welcomes contributions from everyone.
 
 Contributions should be made as GitHub pull requests. Each pull request is
 reviewed by a core contributor [@kevinccbsg](https://github.com/kevinccbsg) and
@@ -20,8 +20,8 @@ off, and then it protects nothing.
 ## Getting started
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/eslint-plugin-twd.git
-cd eslint-plugin-twd
+git clone https://github.com/YOUR_USERNAME/twd-lint.git
+cd twd-lint
 npm install
 ```
 
@@ -94,7 +94,7 @@ Before opening a pull request:
 
 ### Pull request checklist
 
-- [CI](https://github.com/BRIKEV/eslint-plugin-twd/actions) passes.
+- [CI](https://github.com/BRIKEV/twd-lint/actions) passes.
 - **Tests are required.** Pull requests without tests will not be reviewed. See
   the [pull request template](.github/pull_request_template.md).
 - Keep commits small, with each commit passing the tests on its own.
@@ -103,7 +103,7 @@ Before opening a pull request:
 
 ### Reporting issues
 
-Check the [existing issues](https://github.com/BRIKEV/eslint-plugin-twd/issues)
+Check the [existing issues](https://github.com/BRIKEV/twd-lint/issues)
 first. For bugs (a false positive, a missed mistake, a broken autofix or a
 crash), use the bug report template and include the smallest test file that
 shows it.
