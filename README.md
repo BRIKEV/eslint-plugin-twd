@@ -95,7 +95,6 @@ export default [
 The autofix for `no-missing-await` is applied only inside an `async` function,
 where adding `await` is always valid.
 
-
 ### Examples
 
 ```ts
