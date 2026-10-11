@@ -86,6 +86,57 @@ import { describe, it, beforeEach } from "twd-js/runner";
       output: `import { describe } from "twd-js/runner";\nimport { expect } from "twd-js";`,
       errors: [{ messageId: "wrongSource" }, { messageId: "wrongSource" }],
     },
+    // twd-js does not export the runner functions — a common AI mistake
+    {
+      code: `import { twd, describe, it } from "twd-js";`,
+      output: `import { twd } from "twd-js";\nimport { describe, it } from "twd-js/runner";`,
+      errors: [
+        { messageId: "notExported", data: { name: "describe", source: "twd-js", target: "twd-js/runner" } },
+        { messageId: "notExported", data: { name: "it", source: "twd-js", target: "twd-js/runner" } },
+      ],
+    },
+    {
+      code: `import { describe, it, beforeEach, afterEach } from "twd-js";`,
+      output: `import { describe, it, beforeEach, afterEach } from "twd-js/runner";`,
+      errors: [
+        { messageId: "notExported" },
+        { messageId: "notExported" },
+        { messageId: "notExported" },
+        { messageId: "notExported" },
+      ],
+    },
+    // merged into the runner import that is already there
+    {
+      code: `import { twd, beforeEach } from "twd-js";
+import { describe, it } from "twd-js/runner";`,
+      output: `import { twd } from "twd-js";
+import { describe, it, beforeEach } from "twd-js/runner";`,
+      errors: [{ messageId: "notExported" }],
+    },
+    // and the other way round: twd-js/runner does not export expect
+    {
+      code: `import { describe, it, expect } from "twd-js/runner";`,
+      output: `import { describe, it } from "twd-js/runner";\nimport { expect } from "twd-js";`,
+      errors: [{ messageId: "notExported", data: { name: "expect", source: "twd-js/runner", target: "twd-js" } }],
+    },
+    // both TWD imports swapped: each one gives a name to the other
+    {
+      code: `import { twd, describe } from "twd-js";
+import { it, expect } from "twd-js/runner";`,
+      output: `import { twd, expect } from "twd-js";
+import { it, describe } from "twd-js/runner";`,
+      errors: [{ messageId: "notExported" }, { messageId: "notExported" }],
+    },
+    // a mix of vitest and twd-js mistakes
+    {
+      code: `import { twd, describe } from "twd-js";
+import { it, expect } from "vitest";
+`,
+      output: `import { twd, expect } from "twd-js";
+import { describe, it } from "twd-js/runner";
+`,
+      errors: [{ messageId: "notExported" }, { messageId: "wrongSource" }, { messageId: "wrongSource" }],
+    },
     // two wrong sources end up in one new import, not two
     {
       code: `import { describe } from "vitest";

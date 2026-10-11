@@ -7,12 +7,19 @@ const TWD_MODULE = "twd-js";
 const RUNNER_FUNCTIONS = new Set(["describe", "it", "beforeEach", "afterEach"]);
 const TEST_FRAMEWORKS = new Set(["vitest", "@jest/globals", "mocha", "node:test"]);
 
-// Where a name imported from `source` should come from instead, or null if it is fine
+// Where a name imported from `source` should come from instead, or null if it is fine.
+// twd-js and twd-js/runner are a source too: each one lacks the other's exports.
 const targetFor = (source: string, name: string) => {
-  if (RUNNER_FUNCTIONS.has(name) && TEST_FRAMEWORKS.has(source)) return RUNNER_MODULE;
-  if (name === "expect" && (TEST_FRAMEWORKS.has(source) || source === "chai")) return TWD_MODULE;
+  if (RUNNER_FUNCTIONS.has(name) && (TEST_FRAMEWORKS.has(source) || source === TWD_MODULE)) {
+    return RUNNER_MODULE;
+  }
+  if (name === "expect" && (TEST_FRAMEWORKS.has(source) || source === "chai" || source === RUNNER_MODULE)) {
+    return TWD_MODULE;
+  }
   return null;
 };
+
+const isTwdModule = (source: string) => source === TWD_MODULE || source === RUNNER_MODULE;
 
 // `import { it }` has an Identifier, `import { "it" as x }` a string Literal
 const importedName = (specifier: TSESTree.ImportSpecifier) =>
@@ -40,6 +47,7 @@ export default createRule({
     messages: {
       wrongSource:
         '`{{ name }}` comes from "{{ target }}" in TWD tests, not "{{ source }}". The TWD runner does not see tests registered with another framework.',
+      notExported: '"{{ source }}" does not export `{{ name }}`. Import it from "{{ target }}".',
     },
     schema: [],
   },
@@ -53,6 +61,7 @@ export default createRule({
     const rebuildImport = (
       declaration: TSESTree.ImportDeclaration,
       kept: TSESTree.ImportClause[],
+      merged: string[],
     ) => {
       const parts: string[] = [];
       const named: string[] = [];
@@ -60,6 +69,7 @@ export default createRule({
         if (specifier.type === AST_NODE_TYPES.ImportSpecifier) named.push(sourceCode.getText(specifier));
         else parts.push(sourceCode.getText(specifier));
       }
+      named.push(...merged);
       if (named.length > 0) parts.push(`{ ${named.join(", ")} }`);
       const semicolon = sourceCode.getText(declaration).endsWith(";") ? ";" : "";
       return `import ${parts.join(", ")} from ${declaration.source.raw}${semicolon}`;
@@ -81,29 +91,38 @@ export default createRule({
         textsByTarget.set(target, texts);
       }
 
+      const declarations = [...new Set(moves.map((m) => m.declaration))];
+
       // Merge into existing TWD imports; the rest become new import lines
+      const mergeInto = new Map<TSESTree.ImportDeclaration, string[]>();
       const newImports: string[] = [];
       for (const [target, texts] of textsByTarget) {
         const existing = existingTargets.get(target);
         if (existing) {
-          const present = namedSpecifiers(existing);
+          const present = namedSpecifiers(existing).filter((s) => !movedSpecifiers.has(s));
           const missing = texts.filter((t) => !present.some((s) => sourceCode.getText(s) === t));
-          if (missing.length > 0) {
-            fixes.push(fixer.insertTextAfter(present[present.length - 1], `, ${missing.join(", ")}`));
-          }
+          if (missing.length > 0) mergeInto.set(existing, missing);
         } else {
           newImports.push(`import { ${texts.join(", ")} } from ${quote}${target}${quote}${semicolon}`);
         }
       }
 
-      // Rewrite each offending import with what is left of it; the new imports go where the first one was
-      const declarations = [...new Set(moves.map((m) => m.declaration))];
+      // A merge target that is not rewritten below gets the names appended in place
+      for (const [existing, missing] of mergeInto) {
+        if (declarations.includes(existing)) continue;
+        const present = namedSpecifiers(existing);
+        fixes.push(fixer.insertTextAfter(present[present.length - 1], `, ${missing.join(", ")}`));
+      }
+
+      // Rewrite each offending import with what is left of it (plus anything merged into it);
+      // the new imports go where the first one was
       for (const declaration of declarations) {
         const kept = declaration.specifiers.filter(
           (s) => !movedSpecifiers.has(s as TSESTree.ImportSpecifier),
         );
+        const merged = mergeInto.get(declaration) ?? [];
         const lines: string[] = [];
-        if (kept.length > 0) lines.push(rebuildImport(declaration, kept));
+        if (kept.length > 0 || merged.length > 0) lines.push(rebuildImport(declaration, kept, merged));
         if (declaration === firstDeclaration) lines.push(...newImports);
 
         if (lines.length > 0) {
@@ -124,9 +143,8 @@ export default createRule({
         if (node.importKind === "type") return;
         const source = node.source.value;
 
-        if ((source === RUNNER_MODULE || source === TWD_MODULE) && !existingTargets.has(source)) {
-          if (namedSpecifiers(node).length > 0) existingTargets.set(source, node);
-          return;
+        if (isTwdModule(source) && !existingTargets.has(source) && namedSpecifiers(node).length > 0) {
+          existingTargets.set(source, node);
         }
 
         for (const specifier of namedSpecifiers(node)) {
@@ -141,7 +159,7 @@ export default createRule({
         for (const { specifier, declaration, target } of moves) {
           context.report({
             node: specifier,
-            messageId: "wrongSource",
+            messageId: isTwdModule(declaration.source.value) ? "notExported" : "wrongSource",
             data: { name: importedName(specifier), source: declaration.source.value, target },
             // Every report carries the same file-wide fix; ESLint applies it once
             fix: buildFix,
