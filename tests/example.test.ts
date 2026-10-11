@@ -17,11 +17,11 @@ describe("example app", () => {
     expect(lint("src/twd-tests/todos.twd.test.ts")).toEqual([]);
   });
 
-  it("has a playground that triggers every rule", () => {
+  it("has a playground that triggers every recommended rule", () => {
     const messages = lint("lint-playground/mistakes.twd.test.ts");
     expect(messages.every((m) => m.ruleId !== null)).toBe(true); // no parse errors
     const reported = new Set(messages.map((m) => m.ruleId));
-    const allRules = Object.keys(plugin.rules ?? {}).map((name) => `twd/${name}`);
-    expect([...reported].sort()).toEqual(allRules.sort());
+    const recommendedRules = Object.keys(plugin.configs.recommended.rules ?? {});
+    expect([...reported].sort()).toEqual(recommendedRules.sort());
   });
 });

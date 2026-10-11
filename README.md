@@ -63,7 +63,7 @@ That is all. `recommended`:
   or your Vitest/Jest tests;
 - brings its own TypeScript parser for those files, so it works in JavaScript
   projects and in projects without TypeScript set up in ESLint;
-- turns on every rule below as an error.
+- turns on every rule in the first table below as an error.
 
 To pick rules yourself instead:
 
@@ -90,11 +90,34 @@ export default [
 | [`twd/no-missing-await`](docs/rules/no-missing-await.md) | An async TWD call (`twd.visit`, `userEvent.click`, `screenDom.findBy*`, …) that is not awaited | 🔧 |
 | [`twd/runner-imports`](docs/rules/runner-imports.md) | `describe`/`it`/hooks/`expect` imported from Vitest, Jest, Mocha, `node:test` or `chai`, or from the wrong TWD module | 🔧 |
 | [`twd/no-request-body`](docs/rules/no-request-body.md) | `rule.request.body` on a `waitForRequest` result: `rule.request` already is the body | |
-| [`twd/single-top-level-describe`](docs/rules/single-top-level-describe.md) | More than one top-level `describe` in a file | |
 | [`twd/no-focused-tests`](docs/rules/no-focused-tests.md) | `it.only` / `describe.only` left behind | |
 
 The autofix for `no-missing-await` is applied only inside an `async` function,
 where adding `await` is always valid.
+
+These are the rules `recommended` and `npx twd-lint` run. Each one catches a
+real mistake, so each one is an error.
+
+### Opt-in rules
+
+Style preferences rather than mistakes: off by default, available in your own
+ESLint config.
+
+| Rule | What it reports |
+|---|---|
+| [`twd/single-top-level-describe`](docs/rules/single-top-level-describe.md) | More than one top-level `describe` in a file |
+
+```js
+import twd from 'twd-lint'
+
+export default [
+  twd.configs.recommended,
+  {
+    files: ['**/*.twd.test.{ts,tsx,js,jsx}'],
+    rules: { 'twd/single-top-level-describe': 'warn' },
+  },
+]
+```
 
 ### Examples
 
@@ -110,7 +133,6 @@ describe('Todos', () => {
     expect(rule.request.body.title).to.equal('A')       // no-request-body
   })
 })
-describe('Other', () => {})                             // single-top-level-describe
 ```
 
 ```ts
@@ -124,8 +146,6 @@ describe('Todos', () => {
     const rule = await twd.waitForRequest('create')
     expect(rule.request.title).to.equal('A')
   })
-
-  describe('Other', () => {})
 })
 ```
 

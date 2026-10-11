@@ -5,14 +5,18 @@ import plugin from "../src/index";
 
 const { recommended } = plugin.configs;
 
+// Style preferences, not mistakes: available, but off unless a project turns them on
+const OPT_IN = ["twd/single-top-level-describe"];
+
 // The config exactly as a project uses it: one line, nothing else
 const lint = (code: string, filename: string) =>
   new Linter().verify(code, [recommended], filename);
 
 describe("configs.recommended", () => {
-  // Opt-in rules (Phase 3, `strict`) will be the exception to this
-  it("turns on every rule as an error", () => {
-    const ruleNames = Object.keys(plugin.rules ?? {}).map((name) => `twd/${name}`);
+  it("turns on every rule except the opt-in ones, as errors", () => {
+    const ruleNames = Object.keys(plugin.rules ?? {})
+      .map((name) => `twd/${name}`)
+      .filter((name) => !OPT_IN.includes(name));
     expect(Object.keys(recommended.rules ?? {}).sort()).toEqual(ruleNames.sort());
     expect(Object.values(recommended.rules ?? {}).every((level) => level === "error")).toBe(true);
   });

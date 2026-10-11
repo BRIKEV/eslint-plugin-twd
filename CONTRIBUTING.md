@@ -81,8 +81,9 @@ See [ROADMAP.md](ROADMAP.md) for planned rules and the decisions already made.
    does. Otherwise report without a fix.
 5. **Write messages that say what to do**, not only what is wrong. People and AI
    agents both act on them.
-6. Register the rule in `src/index.ts` and `src/configs/recommended.ts`, add a
-   mistake for it to `example/lint-playground/`, write its page in
+6. Register the rule in `src/index.ts`, and in `src/configs/recommended.ts`
+   unless it is an opt-in style rule. Add a mistake for a recommended rule to
+   `example/lint-playground/`, write its page in
    `docs/rules/<rule>.md` (Why, Examples with `// ❌` and `// ✅` blocks, When
    not to use it), and link it from the README's rules table. The tests fail
    until all of these are done, and they lint the docs examples too.

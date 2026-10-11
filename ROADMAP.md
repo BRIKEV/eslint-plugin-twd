@@ -72,6 +72,12 @@ then on, a rule reporting more than before is a breaking change.
 
 ## Decided against
 
+- **`single-top-level-describe` in `recommended`**: it shipped as an error in
+  0.1.x on the belief that several top-level `describe`s break the runner. They
+  do not: the runner treats them like several files. Scanning real projects
+  found 44 reports in 4 repos, all on working tests. It stays available as an
+  opt-in style rule.
+
 - **`mock-before-visit`**: warn on a `twd.mockRequest` registered after
   `twd.visit` with no user action between. Whether that is a bug depends on
   when the app fires the request, which the source does not show; tests are

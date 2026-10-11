@@ -1,13 +1,33 @@
 # twd/single-top-level-describe
 
-Require a single top-level `describe` per TWD test file.
+Prefer a single top-level `describe` per TWD test file.
 
-✅ In `recommended`
+⚪ Opt-in: not in `recommended`, not run by `npx twd-lint`
 
 ## Why
 
-A TWD test file has one root `describe`. Multiple top-level `describe`s break
-the test runner, so further groups belong nested inside the root one.
+A style preference: one root `describe` per file, with further groups nested
+inside it, makes each file read as one group, in the code and in the TWD
+sidebar.
+
+It is a preference, not a mistake. The TWD runner handles several top-level
+`describe`s in one file exactly like several files, and real projects use them
+on purpose, for example one root per function in a file of unit-style tests.
+That is why the rule is off by default. Turn it on if your team shares the
+preference:
+
+```js
+// eslint.config.js
+import twd from "twd-lint";
+
+export default [
+  twd.configs.recommended,
+  {
+    files: ["**/*.twd.test.{ts,tsx,js,jsx}"],
+    rules: { "twd/single-top-level-describe": "warn" },
+  },
+];
+```
 
 ## What it reports
 
@@ -48,4 +68,5 @@ a decision for the author.
 
 ## When not to use it
 
-Keep it on.
+When your files group tests by several top-level `describe`s on purpose. That
+is why it is off by default.

@@ -1,4 +1,4 @@
-// Deliberately broken: one mistake per rule, so you can see each one
+// Deliberately broken: one mistake per recommended rule, so you can see each one
 // underlined in the editor. Not run by TWD (see vite.config.ts).
 // `npm run lint` lists them; `npx eslint lint-playground --fix` shows the autofixes.
 import { twd, screenDom, describe } from 'twd-js' // twd/runner-imports: describe is not in twd-js
@@ -16,4 +16,3 @@ describe('Mistakes', () => {
   })
 })
 
-describe('A second root', () => {}) // twd/single-top-level-describe

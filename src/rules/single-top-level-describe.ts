@@ -16,11 +16,11 @@ const isTopLevel = (node: TSESTree.CallExpression) =>
 export default createRule({
   name: "single-top-level-describe",
   meta: {
-    type: "problem",
-    docs: { description: "Require a single top-level describe per TWD test file" },
+    type: "suggestion",
+    docs: { description: "Prefer a single top-level describe per TWD test file (opt-in style rule)" },
     messages: {
       multipleTopLevelDescribes:
-        "The TWD runner needs one top-level describe per file. Nest this describe inside the first one.",
+        "Prefer one top-level describe per file: nest this describe inside the first one, so the file reads as one group.",
     },
     schema: [],
   },
