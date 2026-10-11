@@ -44,7 +44,9 @@ src/
 tests/
 ├── rules/<rule>.test.ts  # RuleTester cases per rule
 ├── configs.test.ts       # recommended, used the way projects use it
+├── docs.test.ts          # every rule has a docs page whose examples are true
 └── example.test.ts       # keeps example/ in sync with the rules
+docs/rules/<rule>.md      # one page per rule; every error message links to it
 example/                  # Vite + React app with TWD tests (see below)
 ```
 
@@ -75,8 +77,10 @@ npm run lint           # or open the files in your editor with the ESLint extens
 5. **Write messages that say what to do**, not only what is wrong. People and AI
    agents both act on them.
 6. Register the rule in `src/index.ts` and `src/configs/recommended.ts`, add a
-   mistake for it to `example/lint-playground/`, and add it to the README's
-   rules table. The tests fail until all of these are done.
+   mistake for it to `example/lint-playground/`, write its page in
+   `docs/rules/<rule>.md` (Why, Examples with `// ❌` and `// ✅` blocks, When
+   not to use it), and link it from the README's rules table. The tests fail
+   until all of these are done, and they lint the docs examples too.
 
 ## Submitting changes
 

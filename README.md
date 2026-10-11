@@ -60,11 +60,11 @@ export default [
 
 | Rule | What it reports | 🔧 |
 |---|---|---|
-| `twd/no-missing-await` | An async TWD call (`twd.visit`, `userEvent.click`, `screenDom.findBy*`, …) that is not awaited | 🔧 |
-| `twd/runner-imports` | `describe`/`it`/hooks/`expect` imported from Vitest, Jest, Mocha, `node:test` or `chai`, or from the wrong TWD module | 🔧 |
-| `twd/no-request-body` | `rule.request.body` on a `waitForRequest` result: `rule.request` already is the body | |
-| `twd/single-top-level-describe` | More than one top-level `describe` in a file | |
-| `twd/no-focused-tests` | `it.only` / `describe.only` left behind | |
+| [`twd/no-missing-await`](docs/rules/no-missing-await.md) | An async TWD call (`twd.visit`, `userEvent.click`, `screenDom.findBy*`, …) that is not awaited | 🔧 |
+| [`twd/runner-imports`](docs/rules/runner-imports.md) | `describe`/`it`/hooks/`expect` imported from Vitest, Jest, Mocha, `node:test` or `chai`, or from the wrong TWD module | 🔧 |
+| [`twd/no-request-body`](docs/rules/no-request-body.md) | `rule.request.body` on a `waitForRequest` result: `rule.request` already is the body | |
+| [`twd/single-top-level-describe`](docs/rules/single-top-level-describe.md) | More than one top-level `describe` in a file | |
+| [`twd/no-focused-tests`](docs/rules/no-focused-tests.md) | `it.only` / `describe.only` left behind | |
 
 The autofix for `no-missing-await` is applied only inside an `async` function,
 where adding `await` is always valid.

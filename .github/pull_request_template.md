@@ -37,7 +37,7 @@ Only for a new rule. Delete otherwise.
 
 - [ ] Registered in `src/index.ts` and `src/configs/recommended.ts`
 - [ ] A mistake for it in `example/lint-playground/`
-- [ ] Added to the rules table in the README
+- [ ] A docs page in `docs/rules/<rule>.md`, linked from the README's rules table
 - [ ] The message says what to do, not only what is wrong
 - [ ] It has no autofix, or the fix is certain and never changes what the test does
 
