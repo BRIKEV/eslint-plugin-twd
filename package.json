@@ -51,5 +51,9 @@
     "tsup": "^8.5.1",
     "typescript": "~6.0",
     "vitest": "^5.0.3"
+  },
+  "homepage": "https://github.com/BRIKEV/eslint-plugin-twd#readme",
+  "bugs": {
+    "url": "https://github.com/BRIKEV/eslint-plugin-twd/issues"
   }
 }
