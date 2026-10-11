@@ -4,6 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # typescript-eslint supports TypeScript <6.1; lift this when it supports 7
+      - dependency-name: "typescript"
+        versions: [">=6.1.0"]
   - package-ecosystem: "npm"
     directory: "/example"
     schedule:
