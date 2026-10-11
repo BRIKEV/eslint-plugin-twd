@@ -1,7 +1,7 @@
 {
   "name": "twd-lint",
   "version": "0.0.0",
-  "description": "Lint TWD tests: catch mistakes in the editor and in CI. An ESLint plugin, with a zero-config CLI on the way.",
+  "description": "Lint TWD tests: catch mistakes in the editor and in CI. An ESLint plugin and a zero-config CLI.",
   "keywords": [
     "eslint",
     "eslintplugin",
@@ -18,12 +18,19 @@
     "type": "git",
     "url": "https://github.com/BRIKEV/twd-lint.git"
   },
+  "homepage": "https://github.com/BRIKEV/twd-lint#readme",
+  "bugs": {
+    "url": "https://github.com/BRIKEV/twd-lint/issues"
+  },
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
+  },
+  "bin": {
+    "twd-lint": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -33,30 +40,23 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "dev": "tsup --watch",
     "prepublishOnly": "npm run build"
-  },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
     "@typescript-eslint/parser": "^8.71.1",
-    "@typescript-eslint/utils": "^8.71.1"
+    "@typescript-eslint/utils": "^8.71.1",
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
     "@typescript-eslint/rule-tester": "^8.71.1",
-    "eslint": "^10.12.0",
     "tsup": "^8.5.1",
     "typescript": "~6.0",
     "vitest": "^5.0.3"
-  },
-  "homepage": "https://github.com/BRIKEV/twd-lint#readme",
-  "bugs": {
-    "url": "https://github.com/BRIKEV/twd-lint/issues"
   }
 }

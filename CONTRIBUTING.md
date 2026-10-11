@@ -32,17 +32,20 @@ npm install
 | `npm run typecheck` | Type-checks `src/` and `tests/` |
 | `npm run build` | Builds `dist/` |
 | `npm run dev` | Rebuilds `dist/` on every save |
+| `node dist/cli.js <paths>` | Runs the built `twd-lint` command |
 
 ### Project layout
 
 ```
 src/
 ├── index.ts            # the plugin: { meta, rules, configs }
+├── cli/                # the twd-lint command (run.ts holds the logic)
 ├── configs/            # recommended
 ├── rules/              # one rule per file
 └── utils/              # shared helpers (createRule, "is this an async TWD call?")
 tests/
 ├── rules/<rule>.test.ts  # RuleTester cases per rule
+├── cli.test.ts           # the twd-lint command, against temporary projects
 ├── configs.test.ts       # recommended, used the way projects use it
 ├── docs.test.ts          # every rule has a docs page whose examples are true
 └── example.test.ts       # keeps example/ in sync with the rules

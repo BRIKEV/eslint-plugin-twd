@@ -35,3 +35,14 @@ jobs:
           npm ci
           npx tsc -b
           npx eslint src
+
+      # The CLI as users run it, from the built package
+      - name: twd-lint CLI on the example
+        run: |
+          node dist/cli.js example/src
+          code=0
+          node dist/cli.js example/lint-playground || code=$?
+          if [ "$code" -ne 1 ]; then
+            echo "FAIL: the lint playground should exit 1 (problems found), got $code"
+            exit 1
+          fi

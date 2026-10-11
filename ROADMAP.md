@@ -41,22 +41,6 @@ for another reason?
   `restorePage()` puts the app back. Without it, every flow test after the file
   sees a blank page. See the twd docs, "Component Testing".
 
-## `twd-lint` CLI
-
-Lint TWD tests in a project with no ESLint setup, so the twd-ai skill can
-always run it:
-
-```bash
-npx twd-lint                # **/*.twd.test.* from the current directory
-npx twd-lint src/twd-tests  # or a given path
-npx twd-lint --fix
-```
-
-Runs ESLint through its Node API with only `recommended`
-(`new ESLint({ overrideConfigFile: true, overrideConfig: [...] })`). Exit code
-0 when clean, 1 on any error. Open question: a `bin` in this package, or its own
-package? `twd-lint` was free on npm as of 2026-10-09.
-
 ## More rules and a `strict` config
 
 `strict` = `recommended` plus the opt-in rules. Noisy rules stay out of
@@ -74,8 +58,8 @@ package? `twd-lint` was free on npm as of 2026-10-09.
 ## TWD integration (towards 1.0.0)
 
 - **twd-ai `twd` skill:** in the self-check after the type check, lint the
-  files written (`npx eslint <files>` with ESLint, `npx twd-lint <files>`
-  without). Then remove the "Mistakes the type checker will not catch" list from
+  files written (`npx twd-lint <files>`, which works with or without
+  ESLint in the project). Then remove the "Mistakes the type checker will not catch" list from
   `references/test-writing.md`, and the same prose repeated in the other skills.
 - **twd-ai `setup` skill:** add `twd.configs.recommended` to an existing ESLint
   config, or record `npx twd-lint` as the lint command in `twd-patterns.md`.

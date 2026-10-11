@@ -1,25 +1,52 @@
 # twd-lint
 
-ESLint rules that catch [TWD](https://github.com/BRIKEV/twd) test mistakes while
-you write them, in the editor and in CI, instead of in a failing browser run.
+Catch [TWD](https://github.com/BRIKEV/twd) test mistakes while you write them,
+in the editor and in CI, instead of in a failing browser run.
 
 TWD tests run in the browser. A forgotten `await` or a wrong import is only
 found after starting the dev server, running the suite and reading the failure.
 That is slow for a person and expensive for an AI agent, which spends a full run
 to learn it forgot an `await`. Most of these mistakes are visible in the source,
-so a linter can underline them as you type, and fix many of them for you.
+so a linter can report them in a second, and fix many of them for you.
 
-## Install
+twd-lint works two ways:
+
+- **a command**, `npx twd-lint`, that needs no setup at all;
+- **an ESLint plugin**, for projects that already use ESLint.
+
+Both run the same rules. Requires Node 20 or later.
+
+## Command line
 
 ```bash
-npm install --save-dev eslint twd-lint
+npx twd-lint                     # every *.twd.test.* file in the current folder
+npx twd-lint src/twd-tests       # a folder
+npx twd-lint src/a.twd.test.ts   # specific files
+npx twd-lint --fix               # apply the safe fixes, then report what is left
+npx twd-lint --format json       # machine-readable output, for tools and AI agents
 ```
 
-Requires ESLint 9 or 10 (flat config) and Node 20 or later.
+It needs no ESLint installed and no config file, and it ignores the project's
+own ESLint config, so it gives the same result in every project, whatever
+linter the project uses (ESLint, Biome, oxlint or none).
 
-## Usage
+| Exit code | Meaning |
+|---|---|
+| `0` | No problems |
+| `1` | Problems found |
+| `2` | Usage error, or no TWD test files to lint |
 
-Add the recommended config to your `eslint.config.js`:
+To pin a version, install it: `npm install --save-dev twd-lint`, then
+`npx twd-lint` uses the installed one.
+
+## ESLint plugin
+
+```bash
+npm install --save-dev twd-lint
+```
+
+Requires ESLint 9 or 10 (flat config). Add the recommended config to your
+`eslint.config.js`:
 
 ```js
 import twd from 'twd-lint'
@@ -56,7 +83,7 @@ export default [
 
 ## Rules
 
-🔧 fixable with `eslint --fix`
+🔧 fixable with `--fix`
 
 | Rule | What it reports | 🔧 |
 |---|---|---|

@@ -10,5 +10,5 @@
     "types": ["node"],
     "resolveJsonModule": true
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "tsup.config.ts", "vitest.config.ts"]
 }
