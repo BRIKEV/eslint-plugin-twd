@@ -18,7 +18,7 @@ responsibly.
    page and create a new advisory. This keeps the report private until a fix is
    available.
 
-2. **Email** — Contact the maintainers at hello.brikev@gmail.com with details of
+2. **Email** — Contact the maintainers at hello@twd.dev with details of
    the vulnerability.
 
 ### What to include
